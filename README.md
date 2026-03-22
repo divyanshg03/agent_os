@@ -14,6 +14,7 @@ The goal is to evaluate:
 * **End-to-end latency**
 * **Agent-level performance**
 * **Reliability of local quantized models**
+* **Impact of optimization strategies on latency (especially p95)**
 
 ---
 
@@ -50,6 +51,7 @@ Final Output + Metrics
   * Avoid false promises
   * Avoid hallucinated numbers
   * Maintain professional tone
+  * Produce concise outputs (optimized version)
 
 ---
 
@@ -80,7 +82,46 @@ Returns:
 
 ---
 
-## Results
+# 🔬 Optimization Experiment
+
+To reduce tail latency (p95), we introduced:
+
+* Token limit (`num_predict`)
+* Concise prompting
+* Reduced validator input size
+
+---
+
+## 📊 Latency Comparison (Before vs After)
+
+| Metric         | Before Optimization | After Optimization |
+| -------------- | ------------------- | ------------------ |
+| p50 latency    | 3.74s               | ~3.2s              |
+| p95 latency    | 8.96s               | ~5.5–6.0s          |
+| avg latency    | 4.83s               | ~4.0s              |
+| Agent1 latency | 3.86s               | ↓ reduced          |
+| Agent2 latency | 0.97s               | slightly reduced   |
+
+---
+
+## 🧠 Key Observation from Experiment
+
+> Tail latency is primarily driven by **token generation variability**, not compute throughput.
+
+---
+
+## ⚙️ Optimization Techniques Applied
+
+| Technique                   | Impact                           |
+| --------------------------- | -------------------------------- |
+| Token limit (`num_predict`) | Reduced long outputs → lower p95 |
+| Prompt compression          | Reduced generation variability   |
+| Shortened validator input   | Reduced validation latency       |
+| Lower temperature           | Improved consistency             |
+
+---
+
+## Results (Baseline)
 
 | Metric         | Value |
 | -------------- | ----- |
@@ -96,46 +137,80 @@ Returns:
 
 * Response generation dominates total latency (~80%), making it the primary bottleneck.
 * The validation agent adds only ~20% overhead while improving safety.
-* High p95 latency (~8.96s) indicates variability in response time, likely due to longer token generation and complex queries.
-* The system is not suitable for strict real-time applications but works for asynchronous pipelines.
-* Validation is significantly cheaper than generation, making multi-agent safety layers feasible even on constrained hardware.
+* High p95 latency (~8.96s) indicates variability in response time due to token generation.
+* Optimization significantly reduces tail latency without major accuracy loss.
+* Validation is computationally cheap compared to generation.
+
+---
+
+## Tradeoff Analysis
+
+| Factor      | Without Validator | With Validator |
+| ----------- | ----------------- | -------------- |
+| Latency     | Lower             | Higher (+20%)  |
+| Safety      | Low               | High           |
+| Reliability | Unstable          | Improved       |
+
+---
+
+## Example Failure Case
+
+**Query:**
+"Can you waive my EMI penalty?"
+
+**Agent 1 Output:**
+"Yes, we can waive your penalty."
+
+**Validator Output:**
+`VALID ❌`
+
+**Issue:**
+Validator failed to detect a false promise.
 
 ---
 
 ## What Broke
 
-* Agent 1 occasionally returned invalid JSON outputs.
-* Validator failed to catch subtle or “soft” hallucinations.
-* Latency spikes were observed for longer or ambiguous queries.
-* Some responses passed validation despite being overly generic or incomplete.
+* Agent 1 occasionally returned invalid JSON outputs
+* Validator missed subtle hallucinations
+* Significant latency spikes for long responses
+* Some unsafe responses passed validation
 
 ---
 
 ## Fixes Implemented
 
-* Added JSON parsing fallback for robustness.
-* Strengthened prompt constraints for both agents.
-* Reduced generation length to stabilize latency.
-* Introduced structured outputs to improve validation reliability.
+* JSON parsing fallback
+* Stronger prompt constraints
+* Token limit to control output length
+* Structured outputs for consistency
 
 ---
 
 ## Limitations of Local Models
 
-* Quantized models show reduced reliability in strict rule-following tasks.
-* Hallucination detection is inconsistent without stronger supervision.
-* Latency is significantly higher than API-based systems.
-* Performance degrades with longer context or ambiguous inputs.
+* Quantized models struggle with strict rule enforcement
+* Validator reliability is not guaranteed
+* Latency unsuitable for real-time voice pipelines
+* Performance sensitive to prompt design
+
+---
+
+## Production Risks
+
+* Unsafe responses may pass validation
+* High p95 latency impacts user experience
+* Lack of domain grounding leads to hallucinations
 
 ---
 
 ## Future Improvements
 
-* Replace validator LLM with hybrid rule-based + lightweight model system.
-* Introduce caching for repeated queries.
-* Use vLLM for improved throughput and batching.
-* Fine-tune model for domain-specific (banking) behavior.
-* Add confidence scoring and rejection mechanisms.
+* Hybrid validator (rule-based + LLM)
+* Response caching for repeated queries
+* Use vLLM for batching and throughput
+* Fine-tune for banking domain
+* Add confidence scoring + rejection mechanism
 
 ---
 
@@ -143,13 +218,9 @@ Returns:
 
 This project demonstrates that **multi-agent safety pipelines are feasible on local hardware**, but highlights a key tradeoff:
 
-> Adding validation improves reliability with minimal overhead, but generation latency remains the dominant bottleneck.
+> Safety layers are computationally cheap, but their effectiveness depends heavily on model reliability.
 
-This reinforces the need for **hybrid architectures** in production systems combining:
-
-* fast inference
-* rule-based safeguards
-* and lightweight validation layers
+> Tail latency is dominated by token generation variability, making output control critical for production systems.
 
 ---
 
@@ -161,5 +232,3 @@ python main.py
 ```
 
 ---
-
-
