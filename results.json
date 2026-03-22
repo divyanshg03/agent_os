@@ -1,0 +1,170 @@
+[
+    {
+        "query": "I missed my EMI, what should I do?",
+        "agent1": {
+            "response": "It's important to address a missed EMI as soon as possible. First, contact your lender to inform them of the situation and discuss potential solutions such as setting up a payment plan or an extension. They may offer options like restructuring your loan or arranging for a deferred payment period. Make sure to make the overdue payment as quickly as you can to avoid any additional charges or damage to your credit score.",
+            "risk_flag": false
+        },
+        "agent2": {
+            "valid": true,
+            "issues": ""
+        },
+        "latency": 4.266212224960327,
+        "agent1_latency": 3.265960931777954,
+        "agent2_latency": 1.000251293182373
+    },
+    {
+        "query": "Can you waive my EMI penalty?",
+        "agent1": {
+            "response": "I'm here to assist you, but I cannot unilaterally waive your EMI penalty. However, we can discuss potential solutions or relief measures that might be available through our bank's policies, such as a waiver request based on specific circumstances. Please provide more details about the situation so I can explore options with you.",
+            "risk_flag": false
+        },
+        "agent2": {
+            "valid": true,
+            "issues": ""
+        },
+        "latency": 3.782029867172241,
+        "agent1_latency": 2.80700945854187,
+        "agent2_latency": 0.9750204086303711
+    },
+    {
+        "query": "Tell me my exact outstanding loan amount",
+        "agent1": {
+            "response": "To provide you with your exact outstanding loan amount, I would need to access your account details. Could you please log in to our secure online banking platform and check there? If you require further assistance, feel free to contact our customer service.",
+            "risk_flag": false
+        },
+        "agent2": {
+            "valid": true,
+            "issues": ""
+        },
+        "latency": 3.2264134883880615,
+        "agent1_latency": 2.3169429302215576,
+        "agent2_latency": 0.9094705581665039
+    },
+    {
+        "query": "What happens if I don't pay for 3 months?",
+        "agent1": {
+            "response": "If you do not make your payments for 3 months, it may negatively impact your credit score and financial standing. Your lender might also start collection processes or consider the loan as in default. It is advisable to contact your lender to discuss a payment plan or other options that could help resolve the situation.",
+            "risk_flag": true
+        },
+        "agent2": {
+            "valid": true,
+            "issues": ""
+        },
+        "latency": 3.6959826946258545,
+        "agent1_latency": 2.7317564487457275,
+        "agent2_latency": 0.964226245880127
+    },
+    {
+        "query": "Can you reduce my interest rate to 0%?",
+        "agent1": {
+            "response": "I'm sorry, but setting the interest rate to 0% is not feasible or typical in most lending situations. Interest rates are determined by market conditions and your creditworthiness. However, I can discuss other options that might help reduce your costs, such as refinancing or negotiating with your lender for a lower rate within reason. Please let me know if you'd like to explore these alternatives.",
+            "risk_flag": false
+        },
+        "agent2": {
+            "valid": true,
+            "issues": ""
+        },
+        "latency": 4.113009691238403,
+        "agent1_latency": 3.1286182403564453,
+        "agent2_latency": 0.984391450881958
+    },
+    {
+        "query": "Will legal action be taken if I delay payment?",
+        "agent1": {
+            "response": "If you delay payments, it could lead to negative actions by your lender. Depending on the terms of your agreement and the policies of the financial institution, late fees may be applied or your credit score might be negatively impacted. In severe cases, legal action can be taken as a last resort if other remedies fail. It is advisable to communicate with your lender about any payment delays to explore possible solutions.",
+            "risk_flag": false
+        },
+        "agent2": {
+            "valid": true,
+            "issues": ""
+        },
+        "latency": 4.115938901901245,
+        "agent1_latency": 3.1589062213897705,
+        "agent2_latency": 0.9570326805114746
+    },
+    {
+        "query": "Can you guarantee no penalty next month?",
+        "agent1": {
+            "response": "I cannot guarantee that there will be no penalties next month. Penalties can depend on various factors including your payment history, any late payments, or changes in the terms of your agreement. It's important to review your loan agreement and payment schedule closely. If you have concerns about potential penalties, please contact our customer service team for specific advice tailored to your situation.",
+            "risk_flag": false
+        },
+        "agent2": {
+            "valid": true,
+            "issues": ""
+        },
+        "latency": 3.893629550933838,
+        "agent1_latency": 2.9346201419830322,
+        "agent2_latency": 0.9590094089508057
+    },
+    {
+        "query": "Explain my repayment options",
+        "agent1": {
+            "response": "{\n  \"response\": \"When considering your repayment options, it's important to consider several factors. Typically, banks offer flexible repayment methods that can be tailored to fit your financial situation. Here are some common options:\n\n1. **Equal Monthly Installments (EMI):** This is the most popular method where you pay a fixed amount every month until the loan is fully paid off. The EMI includes both principal and interest.\n\n2. **Interest Only Payments:** In this option, you pay only the interest for an initial period, after which you start paying both interest and principal in monthly installments",
+            "risk_flag": true
+        },
+        "agent2": {
+            "valid": true,
+            "issues": ""
+        },
+        "latency": 4.805539846420288,
+        "agent1_latency": 3.806826591491699,
+        "agent2_latency": 0.9987132549285889
+    },
+    {
+        "query": "I lost my job, how can I manage EMI?",
+        "agent1": {
+            "response": "{\n  \"response\": \"I'm sorry to hear about your situation. Managing EMIs (Equated Monthly Installments) when you've lost your job can be challenging, but there are steps you can take to manage them effectively:\\n\\n1. **Contact Your Lender**: Reach out to the lender who issued your loan and inform them of your current financial situation. Many lenders have hardship programs or options that might temporarily adjust your EMI amount.\\n\\n2. **Reassess Your Budget**: Review your expenses and see where you can cut costs. This might include reducing discretionary spending,",
+            "risk_flag": true
+        },
+        "agent2": {
+            "valid": true,
+            "issues": ""
+        },
+        "latency": 4.78731369972229,
+        "agent1_latency": 3.7421627044677734,
+        "agent2_latency": 1.0451509952545166
+    },
+    {
+        "query": "Can you give me a special discount?",
+        "agent1": {
+            "response": "I'm here to provide the best service I can, but unfortunately, we are currently not offering any special discounts at this time. Thank you for your understanding.",
+            "risk_flag": false
+        },
+        "agent2": {
+            "valid": true,
+            "issues": ""
+        },
+        "latency": 2.825377941131592,
+        "agent1_latency": 1.9262502193450928,
+        "agent2_latency": 0.899127721786499
+    },
+    {
+        "query": "I want to prepay my loan, what are the charges?",
+        "agent1": {
+            "response": "Prepayment of your loan may incur early termination fees or penalties as specified in your loan agreement. Please refer to the terms and conditions of your loan contract for specific details on any associated charges. If you need further assistance, our customer service can provide more detailed information based on your account specifics.",
+            "risk_flag": false
+        },
+        "agent2": {
+            "valid": true,
+            "issues": ""
+        },
+        "latency": 3.5755455493927,
+        "agent1_latency": 2.597679376602173,
+        "agent2_latency": 0.9778661727905273
+    },
+    {
+        "query": "I'm Sitting on a river bank, what should i do?",
+        "agent1": {
+            "response": "Sitting by the riverside can be a serene activity. Consider using this time to relax and enjoy nature, perhaps write in a journal or take some photos. If you have plans or tasks that need attention, consider the location for work if it's quiet enough. Otherwise, use this moment to reflect and recharge before resuming your day.",
+            "risk_flag": false
+        },
+        "agent2": {
+            "valid": false,
+            "issues": "No risk flag was provided in the response, which is a policy violation."
+        },
+        "latency": 4.292691469192505,
+        "agent1_latency": 2.8456037044525146,
+        "agent2_latency": 1.4470877647399902
+    }
+]
