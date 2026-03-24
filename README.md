@@ -133,6 +133,43 @@ To reduce tail latency (p95), we introduced:
 
 ---
 
+## Notebook Findings (New .ipynb Run)
+
+Source used: `results.json` generated from the newly added notebook workflow (`Ollama_server_run.ipynb`).
+
+Run profile:
+
+* Total evaluated queries: 12
+* Validator outcomes: 11 compliant, 1 non-compliant
+* Agent1 risk flag count: 3
+
+| Metric         | Notebook Value |
+| -------------- | -------------- |
+| p50 latency    | 4.00s          |
+| p95 latency    | 4.80s          |
+| avg latency    | 3.95s          |
+| Agent1 latency | 2.94s          |
+| Agent2 latency | 1.01s          |
+
+---
+
+## Comparison (Baseline vs Notebook Findings)
+
+| Metric         | Baseline | Notebook | Delta (Notebook - Baseline) |
+| -------------- | -------- | -------- | --------------------------- |
+| p50 latency    | 3.74s    | 4.00s    | +0.26s (+7.0%)             |
+| p95 latency    | 8.96s    | 4.80s    | -4.16s (-46.5%)            |
+| avg latency    | 4.83s    | 3.95s    | -0.88s (-18.3%)            |
+| Agent1 latency | 3.86s    | 2.94s    | -0.92s (-23.9%)            |
+| Agent2 latency | 0.97s    | 1.01s    | +0.04s (+4.1%)             |
+
+Notes:
+
+* The two result sets were run with different sample sizes (baseline: 10 queries, notebook run: 12 queries), so trend comparison is more reliable than strict absolute ranking.
+* The biggest gain in the notebook run is tail latency (p95), while median latency (p50) is slightly higher.
+
+---
+
 ## Key Insights
 
 * Response generation dominates total latency (~80%), making it the primary bottleneck.
