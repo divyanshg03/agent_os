@@ -16,6 +16,11 @@ The goal is to evaluate:
 * **Reliability of local quantized models**
 * **Impact of optimization strategies on latency (especially p95)**
 
+This repository now documents **two execution modes**:
+
+* **Baseline mode (hardcoded):** Agents are directly wired in project code (borrower -> validator) with hardcoded prompts/rules.
+* **OpenClaw mode (server-routed):** The notebook runs with OpenClaw server-style routing, and agent calls are resolved via OpenClaw registration/configuration before inference.
+
 ---
 
 ## System Architecture
@@ -123,6 +128,8 @@ To reduce tail latency (p95), we introduced:
 
 ## Results (Baseline)
 
+Baseline definition: this is the original project path where agent orchestration is **hardcoded in code** (direct borrower + validator call chain), without OpenClaw routing.
+
 | Metric         | Value |
 | -------------- | ----- |
 | p50 latency    | 3.74s |
@@ -133,40 +140,57 @@ To reduce tail latency (p95), we introduced:
 
 ---
 
-## Notebook Findings (New .ipynb Run)
+## Notebook Definition (openclaw_server.ipynb)
 
-Source used: `results.json` generated from the newly added notebook workflow (`Ollama_server_run.ipynb`).
+`openclaw_server.ipynb` is the OpenClaw-routed experiment notebook.
 
-Run profile:
+It is different from baseline in a key way:
 
-* Total evaluated queries: 12
-* Validator outcomes: 11 compliant, 1 non-compliant
-* Agent1 risk flag count: 3
+* **Baseline path:** agent orchestration is hardcoded directly in project code.
+* **Notebook path:** agent orchestration is resolved through OpenClaw configuration/registration, and agent calls are routed through the OpenClaw server flow.
 
-| Metric         | Notebook Value |
-| -------------- | -------------- |
-| p50 latency    | 4.00s          |
-| p95 latency    | 4.80s          |
-| avg latency    | 3.95s          |
-| Agent1 latency | 2.94s          |
-| Agent2 latency | 1.01s          |
+OpenClaw notebook flow:
+
+1. Resolve registered agents (borrower-support and compliance-validator) from OpenClaw configuration.
+2. Route borrower and validator turns using OpenClaw-managed invocation.
+3. Run ablation variants (`baseline_skill_repair`, `no_json_repair`, `no_skill_rules`) and collect latency/compliance metrics.
+4. Save benchmark outputs (`ablation_runs.csv`, `ablation_summary.csv`, `ablation_summary.json`).
 
 ---
 
-## Comparison (Baseline vs Notebook Findings)
+## Notebook Findings (openclaw_server.ipynb)
 
-| Metric         | Baseline | Notebook | Delta (Notebook - Baseline) |
-| -------------- | -------- | -------- | --------------------------- |
-| p50 latency    | 3.74s    | 4.00s    | +0.26s (+7.0%)             |
-| p95 latency    | 8.96s    | 4.80s    | -4.16s (-46.5%)            |
-| avg latency    | 4.83s    | 3.95s    | -0.88s (-18.3%)            |
-| Agent1 latency | 3.86s    | 2.94s    | -0.92s (-23.9%)            |
-| Agent2 latency | 0.97s    | 1.01s    | +0.04s (+4.1%)             |
+This section is kept separate for direct side-by-side comparison.
 
-Notes:
+Experiment setup captured from notebook output:
 
-* The two result sets were run with different sample sizes (baseline: 10 queries, notebook run: 12 queries), so trend comparison is more reliable than strict absolute ranking.
-* The biggest gain in the notebook run is tail latency (p95), while median latency (p50) is slightly higher.
+* Variants tested: `baseline_skill_repair`, `no_json_repair`, `no_skill_rules`
+* Runs per variant: 15
+* Total rows collected: 45
+
+| Backend | Variant              | Runs | p50 (s) | p95 (s) | Mean (s) | Parse Error Rate | Compliance Rate |
+| ------- | -------------------- | ---- | ------- | ------- | -------- | ---------------- | --------------- |
+| ollama  | baseline_skill_repair| 15   | 10.110  | 13.875  | 10.699   | 0.000            | 0.133           |
+| ollama  | no_json_repair       | 15   | 9.795   | 14.958  | 10.477   | 0.000            | 0.133           |
+| ollama  | no_skill_rules       | 15   | 10.055  | 15.894  | 10.748   | 0.000            | 0.200           |
+
+### Comparison (Original Baseline vs OpenClaw Baseline Variant)
+
+Comparison note: this is a comparison between two different orchestration paths:
+
+* Original baseline = hardcoded agent chain in project code
+* OpenClaw baseline variant = OpenClaw-routed chain from notebook/server flow
+
+| Metric      | Original Baseline | OpenClaw baseline_skill_repair | Delta (OpenClaw - Original) |
+| ----------- | ----------------- | ------------------------------ | --------------------------- |
+| p50 latency | 3.74s             | 10.11s                         | +6.37s (+170.3%)           |
+| p95 latency | 8.96s             | 13.88s                         | +4.92s (+54.9%)            |
+| avg latency | 4.83s             | 10.70s                         | +5.87s (+121.5%)           |
+
+Interpretation notes:
+
+* This notebook evaluates additional OpenClaw routing and ablation behavior, so absolute latency is expected to differ from the earlier direct two-agent benchmark.
+* `no_skill_rules` shows the highest compliance rate in this run, but the lowest tail-latency performance (highest p95).
 
 ---
 
