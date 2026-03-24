@@ -33,5 +33,5 @@ google-services.json
 # Android Profiling
 *.hprof
 
-
+__pycache__
 .ollama
